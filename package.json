@@ -1,0 +1,17 @@
+{
+  "name": "ca-api",
+  "version": "1.0.0",
+  "description": "Reltfull API with Node and Express",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Vinicius Goulart Cardozo <vinicius.gcardozo@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "getmac": "^1.2.1",
+    "nodemon": "^1.11.0"
+  }
+}
