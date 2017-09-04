@@ -8,6 +8,21 @@ const getmac = require('getmac')
 const dbPath = `${__dirname}/../../DB.json`
 
 //--------------------> Exports
+<<<<<<< HEAD
+=======
+exports.root = (req, res) => {
+    let stack = app._router.stack
+        .filter(x => x.route)
+        .map(c => { 
+            return {
+                path:c.route.path,
+                methods:c.route.methods
+            }
+        })
+    res.send(stak)
+}
+
+>>>>>>> Release-Branch
 exports.verifyAccess = (req, res) => {
     try{
         const mac = req.params.macAddress
@@ -15,7 +30,15 @@ exports.verifyAccess = (req, res) => {
         let item = {}
         if(data || data.keys)
             item = data.keys.filter(x => x.mac == mac)
+<<<<<<< HEAD
         res.json({result:item.length > 0})
+=======
+        const resp = {
+            key: item.length > 0 ? item[0].key.pretty : null,
+            result: item.length > 0
+        }
+        res.json(resp)
+>>>>>>> Release-Branch
     }
     catch(err){
         _errorHandler(res, err)
@@ -31,7 +54,12 @@ exports.registerKey = (req, res) => {
         const err = _persistRegister(mac, key)
         if(err)
             _errorHandler(res, err)
+<<<<<<< HEAD
         res.status(202).json({result:true})
+=======
+        else
+            res.status(202).json({result:true})
+>>>>>>> Release-Branch
     }
     catch(err){
         _errorHandler(res, err)
@@ -45,8 +73,13 @@ exports.createKey = (req, res) => {
         let key = _addNewKey(dbPath)
         if(!key)
             _errorHandler(res, "Sem acesso à base de dados.")
+<<<<<<< HEAD
 
         res.status(201).json({key})
+=======
+        else
+            res.status(201).json({key})
+>>>>>>> Release-Branch
     } catch(err) {
         _errorHandler(res, err)
     }
@@ -70,6 +103,22 @@ exports.getAllUnusedKeys = (req, res) => {
     }
 }
 
+<<<<<<< HEAD
+=======
+exports.dropDatabase = (req, res) => {
+    try{
+        if(!_authenticate(req.body.auth))
+            _accessDenied(res)
+        else{
+            _createFile(dbPath)
+            res.status(202).json({result:true})
+        }
+    } catch(err){
+        _errorHandler(res, err)
+    }
+}
+
+>>>>>>> Release-Branch
 //--------------------> Private Functions
 function _addNewKey(path) {
     let data = _getFile(path)
@@ -138,7 +187,11 @@ function _authenticate(auth) {
 }
 
 function _errorHandler(res, err){
+<<<<<<< HEAD
     res.status(500).json({text:"Um erro inesperado ocorreu", message:err})
+=======
+    res.status(404).json({text:"Um erro inesperado ocorreu", message:err})
+>>>>>>> Release-Branch
 }
 
 function _accessDenied(res) {
