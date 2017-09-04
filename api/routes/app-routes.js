@@ -3,8 +3,6 @@
 exports.app = app => {
     const controller = require('../controllers/route-controller');
 
-<<<<<<< HEAD
-=======
     app.route('/')
         .get((req, res) => {
             let stack = app._router.stack
@@ -17,8 +15,7 @@ exports.app = app => {
                 })
             res.send(stack)
         })
-
->>>>>>> Release-Branch
+        
     app.route('/app/access/:macAddress')
         .get(controller.verifyAccess);
 
@@ -30,10 +27,6 @@ exports.app = app => {
     
     app.route('/admin/keys')
         .get(controller.getAllUsedKeys)
-<<<<<<< HEAD
-        .post(controller.getAllUnusedKeys);
-=======
         .post(controller.getAllUnusedKeys)
         .delete(controller.dropDatabase);
->>>>>>> Release-Branch
 }
