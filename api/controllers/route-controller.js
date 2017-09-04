@@ -8,6 +8,18 @@ const getmac = require('getmac')
 const dbPath = `${__dirname}/../../DB.json`
 
 //--------------------> Exports
+exports.root = (req, res) => {
+    let stack = app._router.stack
+        .filter(x => x.route)
+        .map(c => { 
+            return {
+                path:c.route.path,
+                methods:c.route.methods
+            }
+        })
+    res.send(stak)
+}
+
 exports.verifyAccess = (req, res) => {
     try{
         const mac = req.params.macAddress
@@ -15,7 +27,11 @@ exports.verifyAccess = (req, res) => {
         let item = {}
         if(data || data.keys)
             item = data.keys.filter(x => x.mac == mac)
-        res.json({result:item.length > 0})
+        const resp = {
+            key: item.length > 0 ? item[0].key.pretty : null,
+            result: item.length > 0
+        }
+        res.json(resp)
     }
     catch(err){
         _errorHandler(res, err)
@@ -31,7 +47,8 @@ exports.registerKey = (req, res) => {
         const err = _persistRegister(mac, key)
         if(err)
             _errorHandler(res, err)
-        res.status(202).json({result:true})
+        else
+            res.status(202).json({result:true})
     }
     catch(err){
         _errorHandler(res, err)
@@ -45,8 +62,8 @@ exports.createKey = (req, res) => {
         let key = _addNewKey(dbPath)
         if(!key)
             _errorHandler(res, "Sem acesso à base de dados.")
-
-        res.status(201).json({key})
+        else
+            res.status(201).json({key})
     } catch(err) {
         _errorHandler(res, err)
     }
@@ -66,6 +83,19 @@ exports.getAllUnusedKeys = (req, res) => {
             _accessDenied(res)
         res.json(_getKeysByCondition((mac) => {return mac == ""}))
     } catch (err) {
+        _errorHandler(res, err)
+    }
+}
+
+exports.dropDatabase = (req, res) => {
+    try{
+        if(!_authenticate(req.body.auth))
+            _accessDenied(res)
+        else{
+            _createFile(dbPath)
+            res.status(202).json({result:true})
+        }
+    } catch(err){
         _errorHandler(res, err)
     }
 }
@@ -138,7 +168,7 @@ function _authenticate(auth) {
 }
 
 function _errorHandler(res, err){
-    res.status(500).json({text:"Um erro inesperado ocorreu", message:err})
+    res.status(404).json({text:"Um erro inesperado ocorreu", message:err})
 }
 
 function _accessDenied(res) {
