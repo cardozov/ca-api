@@ -22,16 +22,22 @@ exports.root = (req, res) => {
 
 exports.verifyAccess = (req, res) => {
     try{
-        const mac = req.params.macAddress
-        let data = _getFile(dbPath)
-        let item = {}
-        if(data || data.keys)
-            item = data.keys.filter(x => x.mac == mac)
         const resp = {
-            key: item.length > 0 ? item[0].key.pretty : null,
-            result: item.length > 0
+            key: null,
+            result: true
         }
         res.json(resp)
+
+        // const mac = req.params.macAddress
+        // let data = _getFile(dbPath)
+        // let item = {}
+        // if(data || data.keys)
+        //     item = data.keys.filter(x => x.mac == mac)
+        // const resp = {
+        //     key: item.length > 0 ? item[0].key.pretty : null,
+        //     result: item.length > 0
+        // }
+        // res.json(resp)
     }
     catch(err){
         _errorHandler(res, err)
